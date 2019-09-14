@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         m.setIcon(resize(icon));
         m.setDraggable(true);
         m.setPosition(new GeoPoint(50.04589598d,21.39814854d));
+        
         map.getOverlays().add(m);
         //the overlay
 
