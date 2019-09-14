@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 //build the marker
         Marker m = new Marker(map);
 
-        Drawable icon = getResources().getDrawable(R.drawable.marker);
+        Drawable icon = getResources().getDrawable(R.drawable.marker_bin);
         m.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
         m.setTitle("Jutro praktyczka xDddddD");
 //must set the icon to null last
