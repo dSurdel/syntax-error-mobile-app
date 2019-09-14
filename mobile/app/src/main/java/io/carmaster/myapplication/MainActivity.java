@@ -1,16 +1,32 @@
 package io.carmaster.myapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import java.util.ArrayList;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.IconOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+
+
 
 public class MainActivity extends AppCompatActivity {
-
+    private Drawable resize(Drawable image) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 75, 75, false);
+        return new BitmapDrawable(getResources(), bitmapResized);
+    }
     MapView map = null;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,9 +45,19 @@ public class MainActivity extends AppCompatActivity {
 
         //inflate and create the map
         setContentView(R.layout.activity_main);
-
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
+//build the marker
+        Marker m = new Marker(map);
+
+        Drawable icon = getResources().getDrawable(R.drawable.marker);
+        m.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
+        m.setTitle("Jutro praktyczka xDddddD");
+//must set the icon to null last
+        m.setIcon(resize(icon));
+        m.setPosition(new GeoPoint(50.04589598d,21.39814854d));
+        map.getOverlays().add(m);
+
     }
 
     public void onResume(){
