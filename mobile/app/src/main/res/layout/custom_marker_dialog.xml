@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
+    android:layout_height="260dp"
     android:background="#3E80B4"
     android:orientation="vertical" >
 
@@ -11,7 +11,38 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:text="Do you realy want to exit ?"
+        android:text="Nazwa zgloszenia"
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/krzysztof_klis" />
+
+    <TextView
+        android:id="@+id/txt_dia_opis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="Opis zgloszenia"
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
+        android:textStyle=""/>
+
+    <TextView
+        android:id="@+id/txt_dia_pytanie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="Czy potwierdzasz zgoszenie"
         android:textColor="@android:color/white"
         android:textSize="15dp"
         android:textStyle="bold"/>
@@ -28,10 +59,10 @@
             android:id="@+id/btn_yes"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:background="@android:color/white"
+            android:background="@android:color/holo_green_light"
             android:clickable="true"
             android:text="Yes"
-            android:textColor="#5DBCD2"
+            android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
         <Button
@@ -39,10 +70,10 @@
             android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
-            android:background="@android:color/white"
+            android:background="@android:color/holo_red_light"
             android:clickable="true"
             android:text="No"
-            android:textColor="#5DBCD2"
+            android:textColor="#FFFFFF"
             android:textStyle="bold" />
     </LinearLayout>
 
