@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -53,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
+
+        IMapController mapController = map.getController();
+        mapController.setZoom(9.5);
+        GeoPoint startPoint = new GeoPoint(52.241903, 21.025242);
+        mapController.setCenter(startPoint);
 //build the marker
         Marker m = new Marker(map);
 
