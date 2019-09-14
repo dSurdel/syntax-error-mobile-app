@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         m.setTitle("Jutro praktyczka xDddddD");
 //must set the icon to null last
         m.setIcon(resize(icon));
+        m.setDraggable(true);
         m.setPosition(new GeoPoint(50.04589598d,21.39814854d));
         map.getOverlays().add(m);
 
