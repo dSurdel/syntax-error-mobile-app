@@ -11,7 +11,7 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
 
     public Activity c;
     public Dialog d;
-    public Button yes, no;
+    public Button yes, no, not_sure;
 
     public CustomMarkerDialog(Activity a) {
         super(a);
@@ -26,8 +26,10 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
         setContentView(R.layout.custom_marker_dialog);
         yes = (Button) findViewById(R.id.btn_yes);
         no = (Button) findViewById(R.id.btn_no);
+        not_sure = (Button) findViewById(R.id.btn_notsure);
         yes.setOnClickListener(this);
         no.setOnClickListener(this);
+        not_sure.setOnClickListener(this);
 
     }
 
@@ -40,6 +42,10 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
                 break;
             case R.id.btn_no:
                 // Reported at fake news
+                dismiss();
+                break;
+            case R.id.btn_notsure:
+                // Reported at not sure
                 dismiss();
                 break;
             default:

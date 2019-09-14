@@ -18,11 +18,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
+import org.osmdroid.bonuspack.location.NominatimPOIProvider;
+import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.IconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Drawable resize(Drawable image) {
         Bitmap b = ((BitmapDrawable)image).getBitmap();
-        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 75, 75, false);
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 85, 85, false);
         return new BitmapDrawable(getResources(), bitmapResized);
     }
     MapView map = null;
@@ -68,10 +72,15 @@ public class MainActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
 
+
+
         IMapController mapController = map.getController();
         mapController.setZoom(9.5);
         GeoPoint startPoint = new GeoPoint(52.241903, 21.025242);
         mapController.setCenter(startPoint);
+
+
+
 //build the marker
         Marker m = new Marker(map);
 
@@ -95,7 +104,65 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         map.getOverlays().add(m);
+        ////////////////////////////////////////////
+        Marker m2 = new Marker(map);
+
+        Drawable icon2 = getResources().getDrawable(R.drawable.marker_bin);
+        m2.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
+        m2.setTitle("Jutro praktyczka xDddddD");
+//must set the icon to null last
+        m2.setIcon(resize(icon));
+        m2.setDraggable(true);
+        m2.setPosition(new GeoPoint(50.03589598d,21.19814854d));
+        m2.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker item, MapView arg1) {
+                //item.showInfoWindow();
+                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this);
+                cdd.show();
+                Toast.makeText(
+                        ctx,
+                        "Item "+item, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+        map.getOverlays().add(m2);
         //the overlay
+
+       //  NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+       // ArrayList<POI> pois = poiProvider.getPOICloseTo(startPoint, "cinema", 50, 0.1);
+
+       // FolderOverlay poiMarkers = new FolderOverlay(this);
+     //   map.getOverlays().add(poiMarkers);
+
+/*
+        Drawable poiIcon = getResources().getDrawable(R.drawable.marker_cluster);
+        for (POI poi:pois){
+            Marker poiMarker = new Marker(map);
+            poiMarker.setTitle(poi.mType);
+            poiMarker.setSnippet(poi.mDescription);
+            poiMarker.setPosition(poi.mLocation);
+            poiMarker.setIcon(poiIcon);
+            if (poi.mThumbnail != null){
+                //poiItem.setImage(new BitmapDrawable(poi.mThumbnail));
+            }
+            //poiMarkers.add(poiMarker);
+        }
+*/
+
+
+        RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(this);
+
+        Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster);
+        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+
+        /*
+        poiMarkers.setIcon(clusterIcon);
+
+        NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+        ArrayList<POI> pois = poiProvider.getPOICloseTo(startPoint, "cinema", 50, 0.1);
+
+        */
 
 
         // We adding a new marker
