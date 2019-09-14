@@ -7,7 +7,7 @@
     tools:context=".AddCitizensInitiativeActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/triggerInitiativeAddButton"
         android:layout_width="313dp"
         android:layout_height="97dp"
         android:background="#FFC107"
@@ -16,7 +16,7 @@
         tools:layout_editor_absoluteY="584dp" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/initiative_name"
         android:layout_width="378dp"
         android:layout_height="63dp"
         android:contentDescription="Name"
@@ -34,7 +34,7 @@
         tools:layout_editor_absoluteY="29dp" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/initiative_description"
         android:layout_width="376dp"
         android:layout_height="130dp"
         android:ems="10"
