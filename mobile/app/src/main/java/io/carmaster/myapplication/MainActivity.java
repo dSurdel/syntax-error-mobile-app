@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setMultiTouchControls(true);
 //build the marker
         Marker m = new Marker(map);
 
