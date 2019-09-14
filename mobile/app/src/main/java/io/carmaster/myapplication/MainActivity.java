@@ -5,8 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,6 +32,13 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private FloatingActionButton fab_main, fab1_mail, fab2_share;
+    private Animation fab_open, fab_close, fab_clock, fab_anticlock;
+    TextView textview_mail, textview_share;
+
+    Boolean isOpen = false;
+
     private Drawable resize(Drawable image) {
         Bitmap b = ((BitmapDrawable)image).getBitmap();
         Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 75, 75, false);
@@ -99,7 +112,59 @@ public class MainActivity extends AppCompatActivity {
         map.getOverlays().add(mRotationGestureOverlay);
         //the overlay
 
+
+        //Fab button
+//        FloatingActionButton fab = findViewById(R.id.imageButton);
+//        fab.setOnClickListener(view -> Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show());
+
+        //fab animation
+        fab_main = findViewById(R.id.fab);
+        fab1_mail = findViewById(R.id.fab1);
+        fab2_share = findViewById(R.id.fab2);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_clock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_clock);
+        fab_anticlock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_anticlock);
+
+        textview_mail = findViewById(R.id.textview_mail);
+        textview_share = findViewById(R.id.textview_share);
+
+        fab_main.setOnClickListener(view -> {
+
+            if (isOpen) {
+
+                textview_mail.setVisibility(View.INVISIBLE);
+                textview_share.setVisibility(View.INVISIBLE);
+                fab2_share.startAnimation(fab_close);
+                fab1_mail.startAnimation(fab_close);
+                fab_main.startAnimation(fab_anticlock);
+                fab2_share.setClickable(false);
+                fab1_mail.setClickable(false);
+                isOpen = false;
+            } else {
+                textview_mail.setVisibility(View.VISIBLE);
+                textview_share.setVisibility(View.VISIBLE);
+                fab2_share.startAnimation(fab_open);
+                fab1_mail.startAnimation(fab_open);
+                fab_main.startAnimation(fab_clock);
+                fab2_share.setClickable(true);
+                fab1_mail.setClickable(true);
+                isOpen = true;
+            }
+
+        });
+
+
+        fab2_share.setOnClickListener(view -> Toast.makeText(getApplicationContext(), "Share", Toast.LENGTH_SHORT).show());
+
+        fab1_mail.setOnClickListener(view -> Toast.makeText(getApplicationContext(), "Email", Toast.LENGTH_SHORT).show());
+
+
     }
+
+
+
 
     public void onResume(){
         super.onResume();
