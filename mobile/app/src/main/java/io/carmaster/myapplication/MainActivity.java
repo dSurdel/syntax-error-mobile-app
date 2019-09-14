@@ -7,9 +7,12 @@ import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.util.GeoPoint;
@@ -18,7 +21,8 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,11 +34,12 @@ public class MainActivity extends AppCompatActivity {
     MapView map = null;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // super.addOverlays();
 
         //handle permissions first, before map is created. not depicted here
 
         //load/initialize the osmdroid configuration, this can be done
-        Context ctx;
+        final Context ctx;
         ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         //setting this before the layout is inflated is a good idea
@@ -58,6 +63,40 @@ public class MainActivity extends AppCompatActivity {
         m.setDraggable(true);
         m.setPosition(new GeoPoint(50.04589598d,21.39814854d));
         map.getOverlays().add(m);
+        //the overlay
+
+        MapEventsReceiver mReceive = new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) {
+
+                // write your code here
+                Toast.makeText(
+                        ctx,
+                        "Item "+p, Toast.LENGTH_LONG).show();
+
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                // write your code here
+                Toast.makeText(
+                        ctx,
+                        "Item long press "+p, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        };
+
+        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getBaseContext(), mReceive);
+        map.getOverlays().add(OverlayEvents);
+
+        //.getOverlays().add(itemOverlay);
+
+        final RotationGestureOverlay mRotationGestureOverlay;
+        mRotationGestureOverlay = new RotationGestureOverlay(map);
+        mRotationGestureOverlay.setEnabled(false);
+        map.getOverlays().add(mRotationGestureOverlay);
+        //the overlay
 
     }
 
