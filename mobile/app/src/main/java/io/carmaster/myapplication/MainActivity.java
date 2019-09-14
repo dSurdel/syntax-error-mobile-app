@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.util.ArrayList;
 
+import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
@@ -48,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
+
+        IMapController mapController = map.getController();
+        mapController.setZoom(9.5);
+        GeoPoint startPoint = new GeoPoint(52.241903, 21.025242);
+        mapController.setCenter(startPoint);
 //build the marker
         Marker m = new Marker(map);
 
@@ -59,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         m.setDraggable(true);
         m.setPosition(new GeoPoint(50.04589598d,21.39814854d));
         map.getOverlays().add(m);
-
     }
 
     public void onResume(){
