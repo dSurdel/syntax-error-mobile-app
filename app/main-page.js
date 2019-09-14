@@ -10,6 +10,7 @@ JavaScript modules. The CommonJS require() function is how you import
 JavaScript modules defined in other files.
 */
 const createViewModel = require("./main-view-model").createViewModel;
+var mapbox = require("nativescript-mapbox");
 
 function onNavigatingTo(args) {
     /*
@@ -32,6 +33,8 @@ function onNavigatingTo(args) {
     page.bindingContext = createViewModel();
 }
 
+
+
 /*
 Exporting a function in a NativeScript code-behind file makes it accessible
 to the file’s corresponding XML file. In this case, exporting the onNavigatingTo
@@ -39,3 +42,25 @@ function here makes the navigatingTo="onNavigatingTo" binding in this page’s X
 file work.
 */
 exports.onNavigatingTo = onNavigatingTo;
+
+/*
+function onMapReady(args) {
+    // you can tap into the native MapView objects (MGLMapView for iOS and com.mapbox.mapboxsdk.maps.MapView for Android)
+    var nativeMapView = args.ios ? args.ios : args.android;
+    console.log("Mapbox onMapReady for " + (args.ios ? "iOS" : "Android") + ", native object received: " + nativeMapView);
+
+    // .. or use the convenience methods exposed on args.map, for instance:
+    args.map.addMarkers([
+        {
+            lat: 52.3602160,
+            lng: 4.8891680,
+            title: 'One-line title here',
+            subtitle: 'Really really nice location',
+            selected: true, // makes the callout show immediately when the marker is added (note: only 1 marker can be selected at a time)
+            onCalloutTap: function(){console.log("'Nice location' marker callout tapped");}
+        }]
+    );
+}
+
+exports.onMapReady = onMapReady;
+*/
