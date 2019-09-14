@@ -3,17 +3,26 @@ package io.carmaster.myapplication.services;
 
 import java.util.List;
 
+import io.carmaster.myapplication.services.retrofitModels.Notification;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public class RetrofitClientInstance {
     public interface  ICSApiService {
-       // @POST("Accounting")
-       // Call<List<Repo>> addUser(@Path("user") String user);
+        //@POST("Accounting")
+        //Call<List<User>> addUser(@Path("user") User user);
+
+        @GET("Notification/")
+        Call<List<Notification>> getNotification(@Query("notificationId") int notificationId);
+
+        //@POST("Notification/")
+        //Call<List<Notification>> addNotification(@Query("description") String description, );
     }
 
     private static Retrofit retrofit;
