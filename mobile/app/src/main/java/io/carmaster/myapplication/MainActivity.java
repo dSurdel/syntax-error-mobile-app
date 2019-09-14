@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         IMapController mapController = map.getController();
-        mapController.setZoom(9.5);
+        mapController.setZoom(11.0);
         GeoPoint startPoint = new GeoPoint(52.241903, 21.025242);
         mapController.setCenter(startPoint);
 
