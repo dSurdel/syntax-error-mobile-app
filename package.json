@@ -12,6 +12,7 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
+    "nativescript-mapbox": "^4.4.1",
     "nativescript-theme-core": "~1.0.6",
     "tns-core-modules": "~6.1.0"
   },
