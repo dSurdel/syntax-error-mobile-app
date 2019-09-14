@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.osmdroid.api.IMapController;
@@ -155,6 +158,13 @@ public class MainActivity extends AppCompatActivity {
 
         Drawable clusterIconD = getResources().getDrawable(R.drawable.marker_cluster);
         Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+
+
+        LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+       // LocationListener locationListener = new MyLocationListener();
+       // locationManager.requestLocationUpdates(
+          //      LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
 
         /*
         poiMarkers.setIcon(clusterIcon);
