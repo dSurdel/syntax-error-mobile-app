@@ -52,8 +52,18 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.email);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.loginButton);
-        final Button registerTriggerButton = findViewById(R.id.registerTriggerButton);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+
+        Button registerTriggerButton = findViewById(R.id.registerTriggerButton);
+        registerTriggerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("TAG", "response 33: " );
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+
+        });
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -122,15 +132,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        registerTriggerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("TAG", "response 33: " );
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-
-          });
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {

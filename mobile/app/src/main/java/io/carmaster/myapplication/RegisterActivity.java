@@ -1,5 +1,8 @@
 package io.carmaster.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +18,7 @@ import com.google.gson.Gson;
 import io.carmaster.myapplication.services.ICSApiService;
 import io.carmaster.myapplication.services.RetrofitClientInstance;
 import io.carmaster.myapplication.services.retrofitModels.User;
+import io.carmaster.myapplication.ui.login.LoginActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         //Toolbar toolbar = findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-
+/*
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
+
 
         final Button registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -58,17 +64,28 @@ public class RegisterActivity extends AppCompatActivity {
                 registerCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+                        Log.e("TAG", "response 33: " );
                         Toast.makeText(
                                 getApplicationContext(),
                                 "Item "+response.body(), Toast.LENGTH_LONG).show();
+                        if (response.isSuccessful()) {
+                            // Do awesome stuff
+                            Intent intent = new Intent(RegisterActivity.this, MenuActivity.class);
+                            startActivity(intent);
+                            SharedPreferences sharedPref = RegisterActivity.this.getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                        } else { Toast.makeText(
+                                getApplicationContext(),
+                                "Error ", Toast.LENGTH_LONG).show();  // Handle other responses
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
+                        Log.e("TAG", "response 33: "+t.toString() );
                         Toast.makeText(
                                 getApplicationContext(),
-                                "Error ", Toast.LENGTH_LONG).show();
+                                "Error "+t, Toast.LENGTH_LONG).show();
                     }
                 });
             }

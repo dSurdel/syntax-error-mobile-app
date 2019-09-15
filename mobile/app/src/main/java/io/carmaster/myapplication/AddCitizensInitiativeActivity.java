@@ -92,7 +92,7 @@ public class AddCitizensInitiativeActivity extends AppCompatActivity {
                 addInitiativeCall.enqueue(new Callback<Initiative>() {
                     @Override
                     public void onResponse(Call<Initiative> call, Response<Initiative> response) {
-                        Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+                        Log.e("TAG", "response 33: " );
                         Toast.makeText(
                                 getApplicationContext(),
                                 "Item "+response.body(), Toast.LENGTH_LONG).show();
@@ -102,7 +102,7 @@ public class AddCitizensInitiativeActivity extends AppCompatActivity {
                     public void onFailure(Call<Initiative> call, Throwable t) {
                         Toast.makeText(
                                 getApplicationContext(),
-                                "Error ", Toast.LENGTH_LONG).show();
+                                "Error "+t.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
 

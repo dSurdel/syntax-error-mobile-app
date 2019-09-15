@@ -28,12 +28,13 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
     private final String itemId;
     private final String initiativeName;
     private final String initiativeDescription;
+    private final int positive;
     public Activity c;
     public Dialog d;
     public Button yes, no, not_sure;
     
 
-    public CustomMarkerDialog(Activity a, String itemId, String initiativeName, String initiativeDescription) {
+    public CustomMarkerDialog(Activity a, String itemId, String initiativeName, String initiativeDescription, int positive) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
@@ -44,6 +45,7 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
         this.ICSApiService = service;
         this.initiativeName = initiativeName;
         this.initiativeDescription = initiativeDescription;
+        this.positive = positive;
     }
 
     @Override
@@ -54,6 +56,9 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
         yes = (Button) findViewById(R.id.btn_yes);
         no = (Button) findViewById(R.id.btn_no);
         not_sure = (Button) findViewById(R.id.btn_notsure);
+
+        yes.setText("YES ("+ this.positive +")");
+
         yes.setOnClickListener(this);
         no.setOnClickListener(this);
         not_sure.setOnClickListener(this);

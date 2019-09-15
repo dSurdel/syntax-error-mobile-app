@@ -1,6 +1,7 @@
 package io.carmaster.myapplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,12 +12,16 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -140,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
         Drawable icon = getResources().getDrawable(R.drawable.marker_society);
         m.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
-        m.setTitle("Jutro praktyczka xDddddD");
+        m.setTitle("Test");
 //must set the icon to null last
         m.setIcon(resize(icon));
         m.setDraggable(true);
@@ -149,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMarkerClick(Marker item, MapView arg1) {
                 //item.showInfoWindow();
-                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, "dsfsdf","", "");
+                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, "","", "", 0);
                 cdd.show();
                 Toast.makeText(
                         ctx,
@@ -159,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         });
         map.getOverlays().add(m);
         ////////////////////////////////////////////
-        Marker m2 = new Marker(map);
+     /*   Marker m2 = new Marker(map);
 
         Drawable icon2 = getResources().getDrawable(R.drawable.marker_eco);
         m2.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
@@ -181,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         map.getOverlays().add(m2);
+        */
+
 
         // Iterate over response from server and add markers to map with notifications GUIDs
         RetrofitClientInstance retrofitClient = new RetrofitClientInstance();
@@ -209,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
 
                         double latitude = jsonobject.getDouble("latitude");
                         double longitude = jsonobject.getDouble("longitude");
+
+                        int positive = jsonobject.getInt("positive");
                        // String description = jsonobject.getString("description");
 
 
@@ -226,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public boolean onMarkerClick(Marker item, MapView arg1) {
                                 //item.showInfoWindow();
-                                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, socialInitiativeId, initiativeName, description);
+                                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, socialInitiativeId, initiativeName, description, positive);
                                 cdd.show();
                                 Toast.makeText(
                                         ctx,
@@ -333,29 +342,128 @@ public class MainActivity extends AppCompatActivity {
                         ctx,
                         "Item long press "+p, Toast.LENGTH_LONG).show();
                 Initiative initiative = new Initiative();
-                /*initiative.setDescription(citizenInitiativeDescriptionTextArea.getText().toString());
-                initiative.setName(citizenInitiativeDescriptionTextArea.getText().toString());
-                Call<Initiative> addInitiativeCall = service.addSocialInitiative(
-                        initiative
-                );
-                addInitiativeCall.enqueue(new Callback<Initiative>() {
-                    @Override
-                    public void onResponse(Call<Initiative> call, Response<Initiative> response) {
-                        Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Item "+response.body(), Toast.LENGTH_LONG).show();
-                    }
+                //initiative.setDescription(citizenInitiativeDescriptionTextArea.getText().toString());
+                //initiative.setName(citizenInitiativeDescriptionTextArea.getText().toString());
 
+                //AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Input social inititative data");
+
+                View viewInflated = LayoutInflater.from(getBaseContext()).inflate(R.layout.txt_dialog_custom, (ViewGroup) findViewById(android.R.id.content), false);
+
+                final EditText initiativeNameiInput = (EditText) viewInflated.findViewById(R.id.text_custom_dialog_input);
+                final EditText initiativeDescriptionInput = (EditText) viewInflated.findViewById(R.id.text_custom_dialog_input_description);
+                builder.setView(viewInflated);
+
+
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onFailure(Call<Initiative> call, Throwable t) {
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Error ", Toast.LENGTH_LONG).show();
+                    public void onClick(DialogInterface dialog, int which) {
+                        //m_Text = input.getText().toString();
+                        initiative.setDescription(initiativeNameiInput.getText().toString());
+                        AlertDialog.Builder builder2 = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
+                        Log.e("TAG", "response 33: " );
+
+                        initiative.setDescription(initiativeDescriptionInput.getText().toString());
+                        initiative.setCoords(p.getLatitude(), p.getLongitude());
+
+                        Call<Initiative> addInitiativeCall = service.addSocialInitiative(
+                                initiative
+                        );
+                        addInitiativeCall.enqueue(new Callback<Initiative>() {
+                            @Override
+                            public void onResponse(Call<Initiative> call, Response<Initiative> response) {
+                                Log.e("TAG", "response 33: " );
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        "Item "+response.body(), Toast.LENGTH_LONG).show();
+                                if (response.isSuccessful()) {
+                                    String gson1 = new Gson().toJson(response.body());
+                                    try {
+                                        JSONObject obj = new JSONObject(gson1);
+                                        String tokenGUID = obj.getString("token");
+
+                                        if (tokenGUID != null) {
+
+                                            Marker m2 = new Marker(map);
+
+                                            Drawable icon2 = getResources().getDrawable(R.drawable.marker_eco);
+                                            m2.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
+                                            m2.setTitle(initiativeNameiInput.getText().toString());
+//must set the icon to null last
+                                            m2.setIcon(resize(icon));
+                                            m2.setDraggable(true);
+                                            m2.setPosition(new GeoPoint(p.getLatitude(),p.getLongitude()));
+                                            m2.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+
+                                                @Override
+                                                public boolean onMarkerClick(Marker item, MapView arg1) {
+                                                    //item.showInfoWindow();
+                                                    CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, tokenGUID, initiativeNameiInput.getText().toString(), initiativeDescriptionInput.getText().toString(), 1);
+                                                    cdd.show();
+                                                    Toast.makeText(
+                                                            ctx,
+                                                            "Item "+item, Toast.LENGTH_LONG).show();
+                                                    return true;
+                                                }
+                                            });
+                                            map.getOverlays().add(m2);
+                                        } else {
+                                            // Failed login
+                                            Toast.makeText(
+                                                    getApplicationContext(),
+                                                    "Invalid username or password", Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        Toast.makeText(
+                                                getApplicationContext(),
+                                                "Invalid username or password or connection problem", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Initiative> call, Throwable t) {
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        "Error "+t.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        builder2.setTitle("Input social inititative description");
+
+                        View viewInflated2 = LayoutInflater.from(getBaseContext()).inflate(R.layout.txt_dialog_custom2, (ViewGroup) findViewById(android.R.id.content), false);
+
+                        final EditText initiativeDescriptionInput = (EditText) viewInflated2.findViewById(R.id.text_custom_dialog_input2);
+                        builder2.setView(viewInflated2);
+
+                        builder2.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog2, int which2) {
+                                        //m_Text = input.getText().toString();
+
+                                      //  dialog2.dismiss();
+                                    }
+                                });
+
+                        //dialog.dismiss();
+
                     }
                 });
-                */
-                 
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+
+
+
 
                 // We can now trigger initiative add
                 return false;
