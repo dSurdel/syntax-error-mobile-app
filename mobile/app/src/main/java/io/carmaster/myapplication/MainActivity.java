@@ -1,6 +1,7 @@
 package io.carmaster.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -55,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
     MapView map = null;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent(MainActivity.this, AddCitizensInitiativeActivity.class);
+        //intent.putExtra("EXIT", false);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
        // super.addOverlays();
 
         //handle permissions first, before map is created. not depicted here

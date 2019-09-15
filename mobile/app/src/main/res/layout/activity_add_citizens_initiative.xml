@@ -10,101 +10,129 @@
         android:id="@+id/triggerInitiativeAddButton"
         android:layout_width="313dp"
         android:layout_height="97dp"
+        android:layout_marginStart="@android:dimen/notification_large_icon_width"
+        android:layout_marginBottom="16dp"
         android:background="#FFC107"
         android:text="Zglos inicjatywe obywatelska"
-        tools:layout_editor_absoluteX="49dp"
-        tools:layout_editor_absoluteY="584dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/radioButton5"
+        app:layout_constraintHorizontal_bias="0.556"
+        app:layout_constraintStart_toStartOf="@+id/radioButton4"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton5"
+        app:layout_constraintVertical_bias="0.439" />
 
     <EditText
         android:id="@+id/initiative_name"
         android:layout_width="378dp"
         android:layout_height="63dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="Name"
         android:ems="10"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="114dp" />
+        app:layout_constraintBottom_toTopOf="@+id/initiative_description"
+        app:layout_constraintStart_toStartOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="50dp"
         android:text="Add citizens initiative"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="29dp" />
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/initiative_description"
         android:layout_width="376dp"
         android:layout_height="130dp"
+        android:layout_marginBottom="52dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="218dp" />
+        app:layout_constraintBottom_toTopOf="@+id/radioButton2"
+        app:layout_constraintStart_toStartOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Initiative description"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="187dp" />
+        app:layout_constraintBottom_toTopOf="@+id/initiative_description"
+        app:layout_constraintStart_toStartOf="@+id/initiative_description" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="112dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="264dp"
+        android:layout_marginBottom="8dp"
         android:text="Initiative name"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="85dp" />
+        app:layout_constraintBottom_toTopOf="@+id/initiative_name"
+        app:layout_constraintEnd_toEndOf="@+id/initiative_name" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="Initiative category"
-        tools:layout_editor_absoluteX="19dp"
-        tools:layout_editor_absoluteY="357dp" />
+        app:layout_constraintBottom_toTopOf="@+id/radioButton"
+        app:layout_constraintStart_toStartOf="@+id/radioButton" />
 
     <RadioButton
         android:id="@+id/radioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="24dp"
         android:text="Bezpieczenstwo"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="389dp" />
+        app:layout_constraintBottom_toTopOf="@+id/radioButton5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/initiative_description"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RadioButton
         android:id="@+id/radioButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="Edukacja"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="389dp" />
+        app:layout_constraintStart_toEndOf="@+id/radioButton"
+        tools:layout_editor_absoluteY="401dp" />
 
     <RadioButton
         android:id="@+id/radioButton3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginBottom="24dp"
         android:text="Infrastruktura"
-        tools:layout_editor_absoluteX="267dp"
-        tools:layout_editor_absoluteY="389dp" />
+        app:layout_constraintBottom_toTopOf="@+id/radioButton5"
+        app:layout_constraintStart_toStartOf="@+id/radioButton2"
+        app:layout_constraintTop_toTopOf="@+id/radioButton2" />
 
     <RadioButton
         android:id="@+id/radioButton4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="52dp"
         android:text="Spolecznosc"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="437dp" />
+        app:layout_constraintEnd_toStartOf="@+id/radioButton5"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton2" />
 
     <RadioButton
         android:id="@+id/radioButton5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="92dp"
         android:text="Srodowisko"
-        tools:layout_editor_absoluteX="169dp"
-        tools:layout_editor_absoluteY="437dp" />
+        app:layout_constraintEnd_toEndOf="@+id/radioButton3"
+        app:layout_constraintTop_toTopOf="@+id/radioButton2" />
 
 </android.support.constraint.ConstraintLayout>
