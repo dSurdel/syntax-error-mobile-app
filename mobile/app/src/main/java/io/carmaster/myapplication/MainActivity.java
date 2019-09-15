@@ -2,6 +2,7 @@ package io.carmaster.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,15 +13,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
@@ -38,6 +46,15 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
+
+import io.carmaster.myapplication.services.ICSApiService;
+import io.carmaster.myapplication.services.RetrofitClientInstance;
+import io.carmaster.myapplication.services.retrofitModels.Initiative;
+import io.carmaster.myapplication.services.retrofitModels.Notification;
+import io.carmaster.myapplication.ui.login.LoginActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,10 +74,17 @@ public class MainActivity extends AppCompatActivity {
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(MainActivity.this, AddCitizensInitiativeActivity.class);
+        // Activity opener
+       // Intent intent = new Intent(MainActivity.this, SweepActivity.class);
+
+
         //intent.putExtra("EXIT", false);
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+
+
+      //  startActivity(intent);
+
+
        // super.addOverlays();
 
         //handle permissions first, before map is created. not depicted here
@@ -69,6 +93,21 @@ public class MainActivity extends AppCompatActivity {
         final Context ctx;
         ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+
+
+
+        boolean isLogged = sharedPref.getBoolean("isLogged", false);
+        if (isLogged) {
+            // Activity opener
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            startActivity(intent);
+        } else {
+            // Activity opener
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         //setting this before the layout is inflated is a good idea
         //it 'should' ensure that the map has a writable location for the map cache, even without permissions
         //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
@@ -80,6 +119,12 @@ public class MainActivity extends AppCompatActivity {
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
+
+       // map = (MapView) findViewById(R.id.initiative_description );
+       // map.setTileSource(TileSourceFactory.MAPNIK);
+       // map.setMultiTouchControls(true);
+
+
 
 
 
@@ -93,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 //build the marker
         Marker m = new Marker(map);
 
-        Drawable icon = getResources().getDrawable(R.drawable.marker_bin);
+        Drawable icon = getResources().getDrawable(R.drawable.marker_society);
         m.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
         m.setTitle("Jutro praktyczka xDddddD");
 //must set the icon to null last
@@ -104,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMarkerClick(Marker item, MapView arg1) {
                 //item.showInfoWindow();
-                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this);
+                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, "dsfsdf","", "");
                 cdd.show();
                 Toast.makeText(
                         ctx,
@@ -116,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         ////////////////////////////////////////////
         Marker m2 = new Marker(map);
 
-        Drawable icon2 = getResources().getDrawable(R.drawable.marker_bin);
+        Drawable icon2 = getResources().getDrawable(R.drawable.marker_eco);
         m2.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
         m2.setTitle("Jutro praktyczka xDddddD");
 //must set the icon to null last
@@ -127,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMarkerClick(Marker item, MapView arg1) {
                 //item.showInfoWindow();
-                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this);
+                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, "dsfsdf", "", "");
                 cdd.show();
                 Toast.makeText(
                         ctx,
@@ -136,6 +181,83 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         map.getOverlays().add(m2);
+
+        // Iterate over response from server and add markers to map with notifications GUIDs
+        RetrofitClientInstance retrofitClient = new RetrofitClientInstance();
+        ICSApiService service = retrofitClient.getRetrofitInstance().create(ICSApiService.class);
+
+        Call<List<Initiative>> notificationsCall = service.getSocialInitiatives();
+        notificationsCall.enqueue(new Callback<List<Initiative>>() {
+            @Override
+            public void onResponse(Call<List<Initiative>> call, Response<List<Initiative>> response) {
+                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+                String gson1 = new Gson().toJson(response.body());
+                try {
+                    //JSONObject obj = new JSONObject(gson1);
+                    JSONArray jsonarray = new JSONArray(gson1);
+
+                   // JSONArray arr = obj.getJSONArray();
+                    for (int i = 0; i < jsonarray.length(); i++)
+                    {
+                        JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+                        String initiativeName = jsonobject.getString("name");
+                        String description = jsonobject.getString("description");
+
+                        String socialInitiativeId = jsonobject.getString("socialInitiativeId");
+
+
+                        double latitude = jsonobject.getDouble("latitude");
+                        double longitude = jsonobject.getDouble("longitude");
+                       // String description = jsonobject.getString("description");
+
+
+                        ////////////////////////////////////////////////////////
+                        Marker m2 = new Marker(map);
+
+                        Drawable icon2 = getResources().getDrawable(R.drawable.marker_eco);
+                        m2.setImage(getResources().getDrawable(R.drawable.krzysztof_klis).mutate());
+                        m2.setTitle(initiativeName);
+                        //must set the icon to null last
+                        m2.setIcon(resize(icon));
+                        m2.setDraggable(true);
+                        m2.setPosition(new GeoPoint(latitude,longitude));
+                        m2.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker item, MapView arg1) {
+                                //item.showInfoWindow();
+                                CustomMarkerDialog cdd=new CustomMarkerDialog(MainActivity.this, socialInitiativeId, initiativeName, description);
+                                cdd.show();
+                                Toast.makeText(
+                                        ctx,
+                                        "Item "+item, Toast.LENGTH_LONG).show();
+                                return true;
+                            }
+                        });
+                        map.getOverlays().add(m2);
+                        ///////////////////////////////////////////////////////
+
+                    }
+                    //Log.e("TAG", "response 33: "+pageName);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                      /*  Toast.makeText(
+                                getApplicationContext(),
+                                "Item "+response.toString(), Toast.LENGTH_LONG).show();*/
+            }
+
+            @Override
+            public void onFailure(Call<List<Initiative>> call, Throwable t) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Error ", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
         //the overlay
 
        //  NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
@@ -210,6 +332,32 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(
                         ctx,
                         "Item long press "+p, Toast.LENGTH_LONG).show();
+                Initiative initiative = new Initiative();
+                /*initiative.setDescription(citizenInitiativeDescriptionTextArea.getText().toString());
+                initiative.setName(citizenInitiativeDescriptionTextArea.getText().toString());
+                Call<Initiative> addInitiativeCall = service.addSocialInitiative(
+                        initiative
+                );
+                addInitiativeCall.enqueue(new Callback<Initiative>() {
+                    @Override
+                    public void onResponse(Call<Initiative> call, Response<Initiative> response) {
+                        Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+                        Toast.makeText(
+                                getApplicationContext(),
+                                "Item "+response.body(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Initiative> call, Throwable t) {
+                        Toast.makeText(
+                                getApplicationContext(),
+                                "Error ", Toast.LENGTH_LONG).show();
+                    }
+                });
+                */
+                 
+
+                // We can now trigger initiative add
                 return false;
             }
         };

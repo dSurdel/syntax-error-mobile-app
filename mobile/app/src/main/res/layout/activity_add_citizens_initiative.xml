@@ -7,7 +7,7 @@
     tools:context=".AddCitizensInitiativeActivity">
 
     <Button
-        android:id="@+id/triggerInitiativeAddButton"
+        android:id="@+id/logoutButton"
         android:layout_width="313dp"
         android:layout_height="97dp"
         android:layout_marginStart="16dp"
