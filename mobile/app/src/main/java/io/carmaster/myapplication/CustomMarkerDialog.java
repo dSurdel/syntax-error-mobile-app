@@ -38,6 +38,7 @@ public class CustomMarkerDialog extends Dialog implements android.view.View.OnCl
         switch (v.getId()) {
             case R.id.btn_yes:
                 // Confirmed report
+
                 c.finish();
                 break;
             case R.id.btn_no:
